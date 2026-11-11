@@ -1,0 +1,30 @@
+{% extends 'tienda/base.html' %}
+
+{% block title %}{{ titulo }} | TechDrop{% endblock %}
+
+{% block content %}
+<h1 class="page-title">{{ titulo }}</h1>
+<p class="muted">{{ total }} producto{{ total|pluralize }} en inventario</p>
+
+<section class="grid">
+  {% for p in productos %}
+  <article class="card">
+    <div class="badges">
+      {% if p.es_nuevo %}<span class="badge new">Nuevo drop</span>{% endif %}
+      {% if p.stock == 0 %}
+        <span class="badge out">Agotado</span>
+      {% elif p.stock <= 5 %}
+        <span class="badge low">Últimas {{ p.stock }}</span>
+      {% endif %}
+    </div>
+    <p class="brand">{{ p.marca|upper }} · {{ p.get_categoria_display }}</p>
+    <h2>{{ p.nombre|title }}</h2>
+    <p class="specs">{{ p.especificaciones|truncatechars:70 }}</p>
+    <p class="price">S/ {{ p.precio }}</p>
+    <p class="muted">Lanzamiento: {{ p.fecha_lanzamiento|date:"d M Y" }}</p>
+  </article>
+  {% empty %}
+  <p class="muted">Aún no hay productos en el catálogo.</p>
+  {% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}TechDrop{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'tienda/css/estilos.css' %}">
+</head>
+<body>
+  <div class="bar">ENVÍO GRATIS EN PEDIDOS MAYORES A S/ 300 · NUEVOS DROPS CADA SEMANA</div>
+  <header class="header">
+    <a class="logo" href="{% url 'tienda:home' %}">&lt;TechDrop/&gt;</a>
+    <nav>
+      <a href="{% url 'tienda:home' %}">Inicio</a>
+      <a href="{% url 'tienda:catalogo' %}">Catálogo</a>
+    </nav>
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="footer">
+    <p>TechDrop · Práctica Semana 11 · Django 5.2 · UNCP</p>
+  </footer>
+</body>
+</html>

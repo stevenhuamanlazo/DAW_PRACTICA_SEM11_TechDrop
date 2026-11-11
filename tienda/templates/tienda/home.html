@@ -1,0 +1,12 @@
+{% extends 'tienda/base.html' %}
+
+{% block title %}{{ titulo }} | Inicio{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <p class="tag">// nuevo drop disponible</p>
+  <h1>{{ titulo }}</h1>
+  <p class="slogan">{{ eslogan }}</p>
+  <a class="btn" href="{% url 'tienda:catalogo' %}">Ver catálogo →</a>
+</section>
+{% endblock %}
