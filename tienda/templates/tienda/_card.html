@@ -1,0 +1,23 @@
+{# Tarjeta de producto reutilizable. Uso: {% include 'tienda/_card.html' with p=producto %} #}
+<article class="card {% if p.agotado %}is-out{% endif %}">
+  <a class="card-visual cat-{{ p.categoria }}" href="{% url 'tienda:detalle' p.pk %}" aria-label="Ver {{ p.nombre|title }}">
+    <span class="card-mark">{{ p.marca|slice:":2"|upper }}</span>
+    <span class="card-badges">
+      {% if p.es_nuevo %}<span class="badge new">Nuevo drop</span>{% endif %}
+      {% if p.agotado %}
+        <span class="badge out">Agotado</span>
+      {% elif p.pocas_unidades %}
+        <span class="badge low">Últimas {{ p.stock }}</span>
+      {% endif %}
+    </span>
+  </a>
+  <div class="card-body">
+    <p class="brand">{{ p.marca|upper }} · {{ p.get_categoria_display }}</p>
+    <h2><a href="{% url 'tienda:detalle' p.pk %}">{{ p.nombre|title }}</a></h2>
+    <p class="specs">{{ p.especificaciones|truncatechars:60 }}</p>
+    <div class="card-foot">
+      <span class="price">S/ {{ p.precio|floatformat:2 }}</span>
+      <span class="muted small">{{ p.fecha_lanzamiento|date:"d M Y" }}</span>
+    </div>
+  </div>
+</article>

@@ -1,12 +1,55 @@
 {% extends 'tienda/base.html' %}
 
-{% block title %}{{ titulo }} | Inicio{% endblock %}
+{% block title %}{{ titulo }} | Hardware para devs{% endblock %}
 
 {% block content %}
 <section class="hero">
   <p class="tag">// nuevo drop disponible</p>
   <h1>{{ titulo }}</h1>
   <p class="slogan">{{ eslogan }}</p>
-  <a class="btn" href="{% url 'tienda:catalogo' %}">Ver catálogo →</a>
+  <div class="hero-actions">
+    <a class="btn" href="{% url 'tienda:catalogo' %}">Ver catálogo →</a>
+    <a class="btn btn-ghost" href="{% url 'tienda:catalogo' %}?disponibles=1&orden=precio_asc">Ofertas disponibles</a>
+  </div>
+  <ul class="stats">
+    <li><strong>{{ total }}</strong><span>producto{{ total|pluralize }}</span></li>
+    <li><strong>{{ disponibles }}</strong><span>en stock</span></li>
+    <li><strong>{{ categorias|length }}</strong><span>categorías</span></li>
+  </ul>
+</section>
+
+<section class="features">
+  <div><strong>Envío gratis</strong><span>En pedidos desde S/ 300</span></div>
+  <div><strong>Garantía</strong><span>12 meses en todo el hardware</span></div>
+  <div><strong>Soporte dev</strong><span>Ayuda técnica real, sin bots</span></div>
+  <div><strong>Pago seguro</strong><span>Tarjeta, Yape o transferencia</span></div>
+</section>
+
+<section>
+  <div class="section-head">
+    <h2>Nuevos drops</h2>
+    <a href="{% url 'tienda:catalogo' %}">Ver todo →</a>
+  </div>
+  <div class="grid">
+    {% for p in nuevos %}
+      {% include 'tienda/_card.html' with p=p %}
+    {% empty %}
+      <p class="muted">Pronto habrá nuevos lanzamientos.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <h2>Explora por categoría</h2>
+  </div>
+  <div class="cats">
+    {% for c in categorias %}
+    <a class="cat-tile cat-{{ c.clave }}" href="{% url 'tienda:catalogo' %}?categoria={{ c.clave }}">
+      <span class="cat-name">{{ c.nombre }}</span>
+      <span class="cat-count">{{ c.cantidad }} producto{{ c.cantidad|pluralize }}</span>
+    </a>
+    {% endfor %}
+  </div>
 </section>
 {% endblock %}

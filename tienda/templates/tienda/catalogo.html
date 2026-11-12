@@ -6,25 +6,35 @@
 <h1 class="page-title">{{ titulo }}</h1>
 <p class="muted">{{ total }} producto{{ total|pluralize }} en inventario</p>
 
+<div class="pills">
+  <a class="pill {% if not categoria_activa %}active{% endif %}" href="{% url 'tienda:catalogo' %}">Todos</a>
+  {% for c in categorias %}
+    <a class="pill {% if categoria_activa == c.clave %}active{% endif %}"
+       href="{% url 'tienda:catalogo' %}?categoria={{ c.clave }}">{{ c.nombre }} <small>{{ c.cantidad }}</small></a>
+  {% endfor %}
+</div>
+
+<form class="filters" method="get" action="{% url 'tienda:catalogo' %}">
+  {% if categoria_activa %}<input type="hidden" name="categoria" value="{{ categoria_activa }}">{% endif %}
+  <input type="search" name="q" value="{{ q }}" placeholder="Buscar por nombre, marca o specs" aria-label="Buscar">
+  <select name="orden" aria-label="Ordenar por">
+    {% for clave, nombre in ordenes %}
+      <option value="{{ clave }}" {% if orden_activo == clave %}selected{% endif %}>{{ nombre }}</option>
+    {% endfor %}
+  </select>
+  <label class="check"><input type="checkbox" name="disponibles" value="1" {% if solo_disponibles %}checked{% endif %}> Solo disponibles</label>
+  <button type="submit">Aplicar</button>
+  <a class="clear" href="{% url 'tienda:catalogo' %}">Limpiar</a>
+</form>
+
 <section class="grid">
   {% for p in productos %}
-  <article class="card">
-    <div class="badges">
-      {% if p.es_nuevo %}<span class="badge new">Nuevo drop</span>{% endif %}
-      {% if p.stock == 0 %}
-        <span class="badge out">Agotado</span>
-      {% elif p.stock <= 5 %}
-        <span class="badge low">Últimas {{ p.stock }}</span>
-      {% endif %}
-    </div>
-    <p class="brand">{{ p.marca|upper }} · {{ p.get_categoria_display }}</p>
-    <h2>{{ p.nombre|title }}</h2>
-    <p class="specs">{{ p.especificaciones|truncatechars:70 }}</p>
-    <p class="price">S/ {{ p.precio }}</p>
-    <p class="muted">Lanzamiento: {{ p.fecha_lanzamiento|date:"d M Y" }}</p>
-  </article>
+    {% include 'tienda/_card.html' with p=p %}
   {% empty %}
-  <p class="muted">Aún no hay productos en el catálogo.</p>
+    <div class="empty">
+      <p>No encontramos productos con esos filtros.</p>
+      <a class="btn" href="{% url 'tienda:catalogo' %}">Ver todo el catálogo</a>
+    </div>
   {% endfor %}
 </section>
 {% endblock %}

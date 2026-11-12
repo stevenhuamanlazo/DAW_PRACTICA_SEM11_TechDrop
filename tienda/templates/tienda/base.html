@@ -4,23 +4,57 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TechDrop: hardware y gadgets para desarrolladores, con inventario en tiempo real.">
   <title>{% block title %}TechDrop{% endblock %}</title>
   <link rel="stylesheet" href="{% static 'tienda/css/estilos.css' %}">
 </head>
 <body>
-  <div class="bar">ENVÍO GRATIS EN PEDIDOS MAYORES A S/ 300 · NUEVOS DROPS CADA SEMANA</div>
+  <div class="bar">
+    <span>ENVÍO GRATIS EN PEDIDOS MAYORES A S/ 300</span>
+    <span class="bar-sep">·</span>
+    <span>NUEVOS DROPS CADA SEMANA</span>
+  </div>
+
   <header class="header">
     <a class="logo" href="{% url 'tienda:home' %}">&lt;TechDrop/&gt;</a>
-    <nav>
+    <nav class="nav" aria-label="Navegación principal">
       <a href="{% url 'tienda:home' %}">Inicio</a>
       <a href="{% url 'tienda:catalogo' %}">Catálogo</a>
+      <a href="{% url 'tienda:catalogo' %}?categoria=perifericos">Periféricos</a>
+      <a href="{% url 'tienda:catalogo' %}?categoria=componentes">Componentes</a>
+      <a href="{% url 'tienda:catalogo' %}?categoria=redes">Redes</a>
+      <a href="{% url 'tienda:catalogo' %}?categoria=iot">IoT</a>
     </nav>
+    <form class="search" action="{% url 'tienda:catalogo' %}" method="get" role="search">
+      <input type="search" name="q" placeholder="Buscar producto o marca" aria-label="Buscar">
+      <button type="submit">Buscar</button>
+    </form>
   </header>
+
   <main class="container">
     {% block content %}{% endblock %}
   </main>
+
   <footer class="footer">
-    <p>TechDrop · Práctica Semana 11 · Django 5.2 · UNCP</p>
+    <div class="footer-grid">
+      <div>
+        <p class="footer-logo">&lt;TechDrop/&gt;</p>
+        <p class="muted">Hardware y gadgets para devs. Proyecto de la Práctica Semana 11 de Desarrollo de Aplicaciones Web.</p>
+      </div>
+      <div>
+        <p class="footer-title">Tienda</p>
+        <a href="{% url 'tienda:catalogo' %}">Todo el catálogo</a>
+        <a href="{% url 'tienda:catalogo' %}?disponibles=1">Solo disponibles</a>
+        <a href="{% url 'tienda:catalogo' %}?orden=precio_asc">Más económicos</a>
+      </div>
+      <div>
+        <p class="footer-title">Proyecto</p>
+        <span class="muted">Django 5.2 · SQLite</span>
+        <span class="muted">Patrón MTV</span>
+        <span class="muted">UNCP · Ing. de Sistemas</span>
+      </div>
+    </div>
+    <p class="footer-copy">© 2026 TechDrop · Práctica Semana 11</p>
   </footer>
 </body>
 </html>

@@ -1,0 +1,51 @@
+{% extends 'tienda/base.html' %}
+
+{% block title %}{{ producto.nombre|title }} | TechDrop{% endblock %}
+
+{% block content %}
+<p class="crumbs">
+  <a href="{% url 'tienda:home' %}">Inicio</a> /
+  <a href="{% url 'tienda:catalogo' %}">Catálogo</a> /
+  <a href="{% url 'tienda:catalogo' %}?categoria={{ producto.categoria }}">{{ producto.get_categoria_display }}</a>
+</p>
+
+<section class="detail">
+  <div class="detail-visual cat-{{ producto.categoria }}">
+    <span class="card-mark big">{{ producto.marca|slice:":2"|upper }}</span>
+  </div>
+  <div class="detail-info">
+    <div class="badges">
+      {% if producto.es_nuevo %}<span class="badge new">Nuevo drop</span>{% endif %}
+      {% if producto.agotado %}
+        <span class="badge out">Agotado</span>
+      {% elif producto.pocas_unidades %}
+        <span class="badge low">Últimas {{ producto.stock }}</span>
+      {% else %}
+        <span class="badge ok">En stock</span>
+      {% endif %}
+    </div>
+    <p class="brand">{{ producto.marca|upper }} · {{ producto.get_categoria_display }}</p>
+    <h1>{{ producto.nombre|title }}</h1>
+    <p class="price big">S/ {{ producto.precio|floatformat:2 }}</p>
+
+    <dl class="spec-list">
+      <dt>Especificaciones</dt><dd>{{ producto.especificaciones }}</dd>
+      <dt>Unidades en stock</dt><dd>{{ producto.stock }}</dd>
+      <dt>Lanzamiento</dt><dd>{{ producto.fecha_lanzamiento|date:"d \d\e F \d\e Y" }}</dd>
+    </dl>
+
+    <a class="btn" href="{% url 'tienda:catalogo' %}">← Volver al catálogo</a>
+  </div>
+</section>
+
+{% if relacionados %}
+<section>
+  <div class="section-head"><h2>También en {{ producto.get_categoria_display }}</h2></div>
+  <div class="grid">
+    {% for p in relacionados %}
+      {% include 'tienda/_card.html' with p=p %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}
