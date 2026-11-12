@@ -1,4 +1,4 @@
-{% load static %}
+{% load static tienda_extras %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,10 +20,8 @@
     <nav class="nav" aria-label="Navegación principal">
       <a href="{% url 'tienda:home' %}">Inicio</a>
       <a href="{% url 'tienda:catalogo' %}">Catálogo</a>
-      <a href="{% url 'tienda:catalogo' %}?categoria=perifericos">Periféricos</a>
-      <a href="{% url 'tienda:catalogo' %}?categoria=componentes">Componentes</a>
-      <a href="{% url 'tienda:catalogo' %}?categoria=redes">Redes</a>
-      <a href="{% url 'tienda:catalogo' %}?categoria=iot">IoT</a>
+      {% menu_categorias %}
+      <a href="{% url 'tienda:inventario' %}" class="nav-inv">Inventario</a>
     </nav>
     <form class="search" action="{% url 'tienda:catalogo' %}" method="get" role="search">
       <input type="search" name="q" placeholder="Buscar producto o marca" aria-label="Buscar">
@@ -46,6 +44,7 @@
         <a href="{% url 'tienda:catalogo' %}">Todo el catálogo</a>
         <a href="{% url 'tienda:catalogo' %}?disponibles=1">Solo disponibles</a>
         <a href="{% url 'tienda:catalogo' %}?orden=precio_asc">Más económicos</a>
+        <a href="{% url 'tienda:inventario' %}">Panel de inventario</a>
       </div>
       <div>
         <p class="footer-title">Proyecto</p>

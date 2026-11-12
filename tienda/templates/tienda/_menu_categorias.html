@@ -1,0 +1,3 @@
+{% for c in categorias %}
+  <a href="{% url 'tienda:catalogo' %}?categoria={{ c.clave }}" {% if categoria_activa == c.clave %}class="active"{% endif %}>{{ c.nombre }}</a>
+{% endfor %}

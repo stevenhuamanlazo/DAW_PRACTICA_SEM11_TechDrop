@@ -1,7 +1,12 @@
+{% load static tienda_extras %}
 {# Tarjeta de producto reutilizable. Uso: {% include 'tienda/_card.html' with p=producto %} #}
 <article class="card {% if p.agotado %}is-out{% endif %}">
-  <a class="card-visual cat-{{ p.categoria }}" href="{% url 'tienda:detalle' p.pk %}" aria-label="Ver {{ p.nombre|title }}">
-    <span class="card-mark">{{ p.marca|slice:":2"|upper }}</span>
+  <a class="card-visual cat-{{ p.categoria }} {% if p.imagen_url %}has-photo{% endif %}" href="{% url 'tienda:detalle' p.pk %}" aria-label="Ver {{ p.nombre|title }}">
+    {% if p.imagen_url %}
+      <img src="{% static p.imagen_url %}" alt="{{ p.nombre|title }}" loading="lazy">
+    {% else %}
+      {% include 'tienda/_icono.html' with categoria=p.categoria %}
+    {% endif %}
     <span class="card-badges">
       {% if p.es_nuevo %}<span class="badge new">Nuevo drop</span>{% endif %}
       {% if p.agotado %}
@@ -16,7 +21,7 @@
     <h2><a href="{% url 'tienda:detalle' p.pk %}">{{ p.nombre|title }}</a></h2>
     <p class="specs">{{ p.especificaciones|truncatechars:60 }}</p>
     <div class="card-foot">
-      <span class="price">S/ {{ p.precio|floatformat:2 }}</span>
+      <span class="price">{{ p.precio|soles }}</span>
       <span class="muted small">{{ p.fecha_lanzamiento|date:"d M Y" }}</span>
     </div>
   </div>

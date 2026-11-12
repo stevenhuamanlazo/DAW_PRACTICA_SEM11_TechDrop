@@ -1,0 +1,24 @@
+FOTOS DE LOS PRODUCTOS
+======================
+Guarda aqui la foto real de cada producto con EXACTAMENTE este nombre
+(formatos aceptados: .jpg .jpeg .png .webp). No hace falta tocar el codigo:
+si el archivo existe, el catalogo y la ficha lo muestran solos; si no existe,
+se ve un icono segun la categoria.
+
+teclado-mecanico-k2.jpg   <-  Teclado Mecanico K2 (Keychron)
+mouse-inalambrico-mx-master.jpg   <-  Mouse Inalambrico Mx Master (Logitech)
+audifonos-gamer-cloud-ii.jpg   <-  Audifonos Gamer Cloud Ii (HyperX)
+ssd-nvme-1tb.jpg   <-  Ssd Nvme 1Tb (Samsung)
+memoria-ram-ddr5-32gb.jpg   <-  Memoria Ram Ddr5 32Gb (Corsair)
+tarjeta-grafica-rtx-4060.jpg   <-  Tarjeta Grafica Rtx 4060 (Gigabyte)
+router-wifi-6-ax3000.jpg   <-  Router Wifi 6 Ax3000 (TP-Link)
+switch-gigabit-8-puertos.jpg   <-  Switch Gigabit 8 Puertos (TP-Link)
+cable-utp-cat6-30m.jpg   <-  Cable Utp Cat6 30M (Ugreen)
+raspberry-pi-5-8gb.jpg   <-  Raspberry Pi 5 8Gb (Raspberry Pi)
+arduino-uno-r4-wifi.jpg   <-  Arduino Uno R4 Wifi (Arduino)
+esp32-devkit-v1.jpg   <-  Esp32 Devkit V1 (Espressif)
+
+Consejos
+- Usa fotos con fondo claro o blanco, de preferencia cuadradas (800x800 px aprox.).
+- Descargalas de la pagina oficial de cada marca o de Wikimedia Commons y cita la fuente en el README.
+- Pesos bajos (menos de 200 KB) para que el catalogo cargue rapido.

@@ -1,5 +1,5 @@
 ﻿from django.shortcuts import render
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, TemplateView
 
 from .models import Producto
 
@@ -31,6 +31,7 @@ class CatalogoView(ListView):
     model = Producto
     template_name = 'tienda/catalogo.html'
     context_object_name = 'productos'
+    paginate_by = 8
 
     def get_queryset(self):
         # Los filtros viven en el QuerySet del modelo; aquí solo se encadenan.
@@ -72,4 +73,21 @@ class DetalleView(DetailView):
             Producto.objects.de_categoria(self.object.categoria)
             .exclude(pk=self.object.pk)[:3]
         )
+        return context
+
+
+class InventarioView(TemplateView):
+    """Panel de inventario: los cálculos (aggregate/annotate) están en el QuerySet del modelo."""
+    template_name = 'tienda/inventario.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        productos = Producto.objects.all()
+        context['titulo'] = 'Inventario'
+        context['stats'] = productos.estadisticas()
+        context['por_categoria'] = productos.por_categoria()
+        context['mas_caro'] = productos.mas_caro()
+        context['mas_barato'] = productos.mas_barato()
+        context['stock_bajo'] = productos.stock_bajo().order_by('stock')
+        context['agotados'] = productos.agotados()
         return context

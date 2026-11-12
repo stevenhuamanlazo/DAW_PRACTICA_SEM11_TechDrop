@@ -1,0 +1,76 @@
+{% extends 'tienda/base.html' %}
+{% load tienda_extras %}
+
+{% block title %}{{ titulo }} | TechDrop{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Panel de inventario</h1>
+<p class="muted">Resumen calculado con el ORM de Django (aggregate y annotate).</p>
+
+<section class="kpis">
+  <div class="kpi"><span>Valor del inventario</span><strong>{{ stats.valor_total|soles }}</strong></div>
+  <div class="kpi"><span>Unidades en stock</span><strong>{{ stats.unidades|default:0 }}</strong></div>
+  <div class="kpi"><span>Productos</span><strong>{{ stats.productos }}</strong></div>
+  <div class="kpi"><span>Precio promedio</span><strong>{{ stats.precio_promedio|soles }}</strong></div>
+</section>
+
+<section class="two-col">
+  <div class="panel">
+    <h2>Por categoría</h2>
+    <table class="tabla">
+      <thead><tr><th>Categoría</th><th>Prod.</th><th>Unid.</th><th>Valor</th></tr></thead>
+      <tbody>
+      {% for c in por_categoria %}
+        <tr>
+          <td><a href="{% url 'tienda:catalogo' %}?categoria={{ c.categoria }}">{{ c.nombre }}</a>
+            <div class="bar-track"><div class="bar-fill" style="width: {{ c.porcentaje }}%"></div></div>
+          </td>
+          <td>{{ c.productos }}</td>
+          <td>{{ c.unidades }}</td>
+          <td class="mono">{{ c.valor|soles }} <small class="muted">({{ c.porcentaje }}%)</small></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="panel">
+    <h2>Extremos de precio</h2>
+    <ul class="lista">
+      {% if mas_caro %}
+      <li><span class="muted">Más caro</span>
+        <a href="{{ mas_caro.get_absolute_url }}">{{ mas_caro.nombre|title }}</a>
+        <strong class="mono">{{ mas_caro.precio|soles }}</strong></li>
+      {% endif %}
+      {% if mas_barato %}
+      <li><span class="muted">Más barato</span>
+        <a href="{{ mas_barato.get_absolute_url }}">{{ mas_barato.nombre|title }}</a>
+        <strong class="mono">{{ mas_barato.precio|soles }}</strong></li>
+      {% endif %}
+    </ul>
+  </div>
+</section>
+
+<section class="two-col">
+  <div class="panel">
+    <h2>Stock bajo <span class="badge low">{{ stock_bajo|length }}</span></h2>
+    <ul class="lista">
+      {% for p in stock_bajo %}
+        <li><a href="{{ p.get_absolute_url }}">{{ p.nombre|title }}</a><strong class="mono">{{ p|estado_stock }}</strong></li>
+      {% empty %}
+        <li class="muted">Nada por reponer.</li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="panel">
+    <h2>Agotados <span class="badge out">{{ agotados|length }}</span></h2>
+    <ul class="lista">
+      {% for p in agotados %}
+        <li><a href="{{ p.get_absolute_url }}">{{ p.nombre|title }}</a><span class="muted">{{ p.marca }}</span></li>
+      {% empty %}
+        <li class="muted">No hay productos agotados.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+{% endblock %}
