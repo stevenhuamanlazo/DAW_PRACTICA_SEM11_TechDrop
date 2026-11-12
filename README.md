@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 # &lt;TechDrop/&gt;
 
@@ -11,13 +11,11 @@
 
 Práctica Semana 11 · Desarrollo de Aplicaciones Web (IS093A) · Ingeniería de Sistemas, UNCP
 
-[Ver página del proyecto](https://stevenhuamanlazo.github.io/DAW_PRACTICA_SEM11_TechDrop/)
 
 </div>
 
 Aplicación web hecha con **Django 5.2** y **SQLite** que aplica el patrón **MTV** (Model-Template-View): catálogo de teclados, componentes, redes y placas IoT, con control de stock, filtros, búsqueda, paginación, ficha de producto y un panel de inventario solo para el personal.
 
-> GitHub Pages solo sirve contenido estático, por eso la página del proyecto muestra capturas. La aplicación Django se ejecuta en local (ver abajo).
 
 ## Vista previa
 
@@ -94,7 +92,7 @@ tienda/
   static/tienda/         # CSS e imágenes de productos
   management/commands/   # cargar_datos
   tests.py               # 32 pruebas
-docs/                    # página de GitHub Pages (capturas)
+docs/                    # capturas del proyecto
 ```
 
 ## Notas
