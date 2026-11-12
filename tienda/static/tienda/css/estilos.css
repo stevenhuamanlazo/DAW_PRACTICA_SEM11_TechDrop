@@ -193,3 +193,26 @@ section { margin-bottom: 2.5rem; }
 .lista li:last-child { border-bottom: 0; }
 .lista a:hover { color: var(--acc); }
 @media (max-width: 820px) { .nav .nav-inv { margin-left: 0; } }
+
+/* ===== v3: fotos de producto sin "recorte" ===== */
+/* Fondo claro y la foto se "funde" con él: multiply hace desaparecer el blanco de la foto
+   y brightness lleva los blancos apagados (JPG) a blanco puro. */
+.card-visual.has-photo,
+.detail-visual.has-photo {
+  background: radial-gradient(circle at 50% 40%, #ffffff 0%, #eceff3 100%);
+}
+.card-visual img,
+.detail-visual img {
+  mix-blend-mode: multiply;
+  filter: brightness(1.07) contrast(1.02);
+  border-radius: 10px;
+}
+/* Fotos con fondo oscuro (sin blanco que fundir): ocupan todo el recuadro, sin bandas blancas */
+.card-visual img[src*="rtx-4060"],
+.detail-visual img[src*="rtx-4060"] {
+  object-fit: cover; padding: 0; border-radius: 0; mix-blend-mode: normal; filter: none;
+}
+/* Agotado: solo se atenúa la foto y el texto, no toda la tarjeta (antes el fondo se veía gris) */
+.card.is-out { opacity: 1; }
+.card.is-out .card-visual img { filter: grayscale(1) brightness(1.07); opacity: .5; }
+.card.is-out .card-body { opacity: .6; }
