@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TechDrop · Práctica Semana 11 · Django</title>
+<style>
+:root{--bg:#0a0c10;--panel:#11151c;--line:#1f2630;--txt:#e8ecf1;--mut:#8b96a5;--neon:#39ff88}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,Segoe UI,Arial,sans-serif;line-height:1.55}
+a{color:var(--neon)}
+.wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+header{border-bottom:1px solid var(--line);padding:18px 0}
+.logo{font-family:Consolas,monospace;font-weight:700;color:var(--neon);font-size:1.3rem}
+.hero{padding:56px 0 30px;text-align:center}
+.hero small{font-family:Consolas,monospace;color:var(--neon)}
+.hero h1{font-size:clamp(2.4rem,6vw,4rem);margin:10px 0}
+.hero p{color:var(--mut);max-width:640px;margin:0 auto 24px}
+.btn{display:inline-block;padding:12px 22px;border-radius:10px;font-weight:700;text-decoration:none;margin:4px}
+.btn.p{background:var(--neon);color:#04110a}
+.btn.s{border:1px solid var(--line);color:var(--txt)}
+h2{margin:46px 0 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card b{color:var(--neon);display:block;margin-bottom:4px}
+.card span{color:var(--mut);font-size:.93rem}
+figure{margin:0;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+figure img{width:100%;display:block}
+figcaption{padding:10px 16px;color:var(--mut);font-size:.9rem}
+.shots{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:16px}
+@media(max-width:520px){.shots{grid-template-columns:1fr}}
+table{width:100%;border-collapse:collapse;background:var(--panel);border-radius:14px;overflow:hidden}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:.93rem}
+th{color:var(--neon)}
+code{font-family:Consolas,monospace;background:#0d1117;padding:2px 6px;border-radius:6px}
+.note{border-left:3px solid var(--neon);background:var(--panel);padding:14px 18px;border-radius:0 12px 12px 0;color:var(--mut)}
+footer{border-top:1px solid var(--line);margin-top:56px;padding:24px 0;color:var(--mut);text-align:center;font-size:.9rem}
+</style>
+</head>
+<body>
+<header><div class="wrap"><span class="logo">&lt;TechDrop/&gt;</span></div></header>
+
+<main class="wrap">
+  <section class="hero">
+    <small>// práctica semana 11 · django 5.2</small>
+    <h1>TechDrop</h1>
+    <p>Catálogo e inventario de hardware y gadgets para desarrolladores, hecho con Django, SQLite y el patrón MTV.</p>
+    <a class="btn p" href="https://github.com/stevenhuamanlazo/DAW_PRACTICA_SEM11_TechDrop">Ver código en GitHub</a>
+    <a class="btn s" href="#capturas">Ver capturas</a>
+  </section>
+
+  <div class="note">Esta página es estática (GitHub Pages no ejecuta Python). La aplicación Django corre en local con <code>python manage.py runserver</code>; aquí se muestran capturas de su funcionamiento.</div>
+
+  <h2>Qué incluye</h2>
+  <div class="grid">
+    <div class="card"><b>Rutas</b><span><code>include()</code> y <code>name</code> en cada ruta; solo <code>{% url %}</code> en plantillas.</span></div>
+    <div class="card"><b>Vistas</b><span>FBV <code>home</code> y CBV con <code>ListView</code>, <code>DetailView</code> y <code>get_context_data()</code>.</span></div>
+    <div class="card"><b>Plantillas</b><span>Herencia con <code>base.html</code>, bloques, <code>for</code>, <code>if</code>, filtros y tags propios.</span></div>
+    <div class="card"><b>Modelo y ORM</b><span><code>Producto</code>, migraciones, QuerySet propio, <code>aggregate</code> y <code>annotate</code>.</span></div>
+    <div class="card"><b>Inventario</b><span>Panel solo para personal (<code>is_staff</code>) con login del admin.</span></div>
+    <div class="card"><b>Pruebas</b><span>32 pruebas automáticas con el test runner de Django.</span></div>
+  </div>
+
+  <h2 id="capturas">Capturas</h2>
+  <div class="shots">
+    <figure><img src="img/inicio.jpg" alt="Inicio de TechDrop"><figcaption>Inicio (FBV)</figcaption></figure>
+    <figure><img src="img/catalogo.jpg" alt="Catálogo de productos"><figcaption>Catálogo (ListView) con filtros, fotos y paginación</figcaption></figure>
+    <figure><img src="img/ficha.jpg" alt="Ficha de producto"><figcaption>Ficha con consulta por WhatsApp</figcaption></figure>
+    <figure><img src="img/inventario.jpg" alt="Panel de inventario"><figcaption>Panel de inventario (solo personal)</figcaption></figure>
+  </div>
+
+  <h2>Rutas de la app</h2>
+  <table>
+    <tr><th>URL</th><th>Vista</th><th>Acceso</th></tr>
+    <tr><td><code>/</code></td><td>home (FBV)</td><td>Público</td></tr>
+    <tr><td><code>/catalogo/</code></td><td>CatalogoView (ListView)</td><td>Público</td></tr>
+    <tr><td><code>/producto/&lt;id&gt;/</code></td><td>DetalleView (DetailView)</td><td>Público</td></tr>
+    <tr><td><code>/inventario/</code></td><td>InventarioView (TemplateView)</td><td>Solo personal</td></tr>
+  </table>
+
+  <h2>Ejecutarlo en local</h2>
+  <div class="card"><code>git clone https://github.com/stevenhuamanlazo/DAW_PRACTICA_SEM11_TechDrop.git</code><br><br>
+  Los pasos completos están en el <a href="https://github.com/stevenhuamanlazo/DAW_PRACTICA_SEM11_TechDrop#readme">README</a>.</div>
+</main>
+
+<footer>
+  Desarrollo de Aplicaciones Web (IS093A) · Ingeniería de Sistemas · UNCP<br>
+  Steven Huamanlazo Pariona
+</footer>
+</body>
+</html>
