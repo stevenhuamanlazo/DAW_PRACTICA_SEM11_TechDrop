@@ -16,6 +16,7 @@ pip install -r requirements.txt
 python manage.py check
 python manage.py migrate
 python manage.py cargar_datos
+python manage.py createsuperuser
 python manage.py runserver
 ```
 
@@ -30,7 +31,7 @@ Pruebas automáticas: `python manage.py test`
 | `/` | `home` (FBV) | `tienda:home` |
 | `/catalogo/` | `CatalogoView` (CBV, `ListView`) | `tienda:catalogo` |
 | `/producto/<id>/` | `DetalleView` (CBV, `DetailView`) | `tienda:detalle` |
-| `/inventario/` | `InventarioView` (CBV, `TemplateView`) | `tienda:inventario` |
+| `/inventario/` | `InventarioView` (CBV, `TemplateView`), **solo personal (staff)** | `tienda:inventario` |
 | `/admin/` | Admin de Django | |
 
 El catálogo acepta `?categoria=`, `?q=`, `?orden=`, `?disponibles=1` y `?page=` (8 productos por página).
@@ -44,6 +45,12 @@ El catálogo acepta `?categoria=`, `?q=`, `?orden=`, `?disponibles=1` y `?page=`
 - **Filtros y etiquetas propios** (`tienda/templatetags/tienda_extras.py`): filtros `soles` y `estado_stock`, inclusion tag `{% menu_categorias %}` (el menú sale de la base de datos) y simple tag `{% url_con %}` (paginación sin perder filtros).
 - **Consultas ORM avanzadas:** `aggregate` (valor total del inventario con `F`, promedio, máximo, mínimo), `annotate` + `values` (resumen por categoría), `Q` (búsqueda), `exclude`, `order_by` y paginación con `ListView`.
 - **Estructura lista para la Semana 12:** el modelo ya está en el admin con `list_display`, filtros y búsqueda.
+
+## Acceso y flujo de compra
+
+- **Inventario restringido:** `/inventario/` solo se abre con un usuario del personal (`is_staff`). Sin sesión redirige al login del admin; con sesión sin permiso responde 403. El enlace del menú y el valor en inventario de la ficha solo se muestran al personal. Para entrar hay que crear un usuario con `python manage.py createsuperuser` y abrir `/admin/login/`.
+- **Flujo del cliente:** inicio → catálogo (filtros, búsqueda, orden, paginación) → ficha del producto → botón **Consultar por WhatsApp** con el mensaje ya escrito. El número se cambia en `NUMERO_WHATSAPP` (`tienda/views.py`).
+- El carrito, el registro de clientes y las sesiones corresponden a la Semana 12 (formularios, admin y sesiones), por eso no se incluyen todavía.
 
 ## Fotos de los productos
 

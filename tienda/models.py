@@ -134,6 +134,13 @@ class Producto(models.Model):
     def valor_en_stock(self):
         return self.precio * self.stock
 
+    @property
+    def mensaje_consulta(self):
+        """Texto prellenado para consultar el producto por WhatsApp."""
+        if self.agotado:
+            return f'Hola TechDrop, {self.nombre.title()} figura agotado. ¿Cuándo vuelve a haber stock?'
+        return f'Hola TechDrop, quiero consultar por {self.nombre.title()} (S/ {self.precio}).'
+
     @cached_property
     def imagen_url(self):
         """Ruta static de la foto del producto, o None si no existe.

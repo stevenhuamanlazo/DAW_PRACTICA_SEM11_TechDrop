@@ -216,3 +216,13 @@ section { margin-bottom: 2.5rem; }
 .card.is-out { opacity: 1; }
 .card.is-out .card-visual img { filter: grayscale(1) brightness(1.07); opacity: .5; }
 .card.is-out .card-body { opacity: .6; }
+
+/* ===== v4: acciones de la ficha y "Cómo comprar" ===== */
+.actions { display: flex; gap: .8rem; flex-wrap: wrap; }
+.btn-wa { background: #25d366; color: #04210f; }
+.btn-wa:hover { box-shadow: 0 8px 24px rgba(37, 211, 102, .3); }
+.steps { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; }
+.steps li { display: flex; gap: 1rem; align-items: flex-start; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.1rem 1.2rem; }
+.steps li > span { flex: none; width: 2rem; height: 2rem; border-radius: 50%; background: var(--acc-dim); color: var(--acc); border: 1px solid var(--acc); display: grid; place-items: center; font: 700 .9rem var(--mono); }
+.steps strong { display: block; margin-bottom: .15rem; }
+.steps p { color: var(--muted); font-size: .88rem; }

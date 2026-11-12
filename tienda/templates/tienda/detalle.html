@@ -36,11 +36,17 @@
     <dl class="spec-list">
       <dt>Especificaciones</dt><dd>{{ producto.especificaciones }}</dd>
       <dt>Unidades en stock</dt><dd>{{ producto.stock }} <span class="muted">({{ producto|estado_stock }})</span></dd>
-      <dt>Valor en inventario</dt><dd>{{ producto.valor_en_stock|soles }}</dd>
+      {% if user.is_staff %}<dt>Valor en inventario</dt><dd>{{ producto.valor_en_stock|soles }}</dd>{% endif %}
       <dt>Lanzamiento</dt><dd>{{ producto.fecha_lanzamiento|date:"d \d\e F \d\e Y" }}</dd>
     </dl>
 
-    <a class="btn" href="{% url 'tienda:catalogo' %}">← Volver al catálogo</a>
+    <div class="actions">
+      <a class="btn btn-wa" target="_blank" rel="noopener"
+         href="https://wa.me/{{ whatsapp }}?text={{ producto.mensaje_consulta|urlencode }}">
+        {% if producto.agotado %}Avisarme cuando haya stock{% else %}Consultar por WhatsApp{% endif %}
+      </a>
+      <a class="btn btn-ghost" href="{% url 'tienda:catalogo' %}">← Volver al catálogo</a>
+    </div>
   </div>
 </section>
 

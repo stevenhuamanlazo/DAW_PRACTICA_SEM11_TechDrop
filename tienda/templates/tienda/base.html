@@ -21,7 +21,7 @@
       <a href="{% url 'tienda:home' %}">Inicio</a>
       <a href="{% url 'tienda:catalogo' %}">Catálogo</a>
       {% menu_categorias %}
-      <a href="{% url 'tienda:inventario' %}" class="nav-inv">Inventario</a>
+      {% if user.is_staff %}<a href="{% url 'tienda:inventario' %}" class="nav-inv">Inventario</a>{% endif %}
     </nav>
     <form class="search" action="{% url 'tienda:catalogo' %}" method="get" role="search">
       <input type="search" name="q" placeholder="Buscar producto o marca" aria-label="Buscar">
@@ -44,7 +44,7 @@
         <a href="{% url 'tienda:catalogo' %}">Todo el catálogo</a>
         <a href="{% url 'tienda:catalogo' %}?disponibles=1">Solo disponibles</a>
         <a href="{% url 'tienda:catalogo' %}?orden=precio_asc">Más económicos</a>
-        <a href="{% url 'tienda:inventario' %}">Panel de inventario</a>
+        {% if user.is_staff %}<a href="{% url 'tienda:inventario' %}">Panel de inventario</a>{% endif %}
       </div>
       <div>
         <p class="footer-title">Proyecto</p>

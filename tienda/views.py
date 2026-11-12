@@ -1,7 +1,12 @@
-﻿from django.shortcuts import render
+﻿from django.contrib.auth.mixins import UserPassesTestMixin
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import DetailView, ListView, TemplateView
 
 from .models import Producto
+
+# Número de WhatsApp de la tienda (código de país + número, sin + ni espacios). Cambiar por el real.
+NUMERO_WHATSAPP = '51999999999'
 
 # Ordenamientos permitidos en el catálogo (lista blanca: nunca se usa el texto del usuario tal cual)
 ORDENES = {
@@ -69,6 +74,7 @@ class DetalleView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['titulo'] = self.object.nombre
+        context['whatsapp'] = NUMERO_WHATSAPP
         context['relacionados'] = (
             Producto.objects.de_categoria(self.object.categoria)
             .exclude(pk=self.object.pk)[:3]
@@ -76,9 +82,17 @@ class DetalleView(DetailView):
         return context
 
 
-class InventarioView(TemplateView):
-    """Panel de inventario: los cálculos (aggregate/annotate) están en el QuerySet del modelo."""
+class InventarioView(UserPassesTestMixin, TemplateView):
+    """Panel de inventario, solo para el personal (is_staff).
+
+    Usa el login que ya trae Django (el del admin). Los cálculos (aggregate/annotate)
+    están en el QuerySet del modelo.
+    """
     template_name = 'tienda/inventario.html'
+    login_url = reverse_lazy('admin:login')   # sin sesión → pide iniciar sesión en el admin
+
+    def test_func(self):
+        return self.request.user.is_staff     # con sesión pero sin permiso → 403
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

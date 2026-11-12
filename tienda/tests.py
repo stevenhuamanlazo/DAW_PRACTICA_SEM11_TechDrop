@@ -1,5 +1,6 @@
 from datetime import date
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 
@@ -124,12 +125,52 @@ class AgregacionesTests(TestCase):
         self.assertEqual(Producto.objects.mas_barato().nombre, 'router ax')
         self.assertEqual([p.nombre for p in Producto.objects.stock_bajo()], ['raspberry pi'])
 
-    def test_vista_inventario(self):
+    def test_vista_inventario_para_staff(self):
+        staff = User.objects.create_user('admin1', password='x', is_staff=True)
+        self.client.force_login(staff)
         r = self.client.get(reverse('tienda:inventario'))
         self.assertEqual(r.status_code, 200)
         self.assertTemplateUsed(r, 'tienda/inventario.html')
         self.assertContains(r, 'S/ 4,200.00')
         self.assertEqual(r.context['mas_caro'].nombre, 'raspberry pi')
+
+
+class AccesoInventarioTests(TestCase):
+    """El inventario es solo para el personal (is_staff)."""
+
+    def test_anonimo_es_redirigido_al_login_del_admin(self):
+        r = self.client.get(reverse('tienda:inventario'))
+        self.assertEqual(r.status_code, 302)
+        self.assertEqual(r['Location'], '/admin/login/?next=/inventario/')
+
+    def test_usuario_sin_permiso_recibe_403(self):
+        self.client.force_login(User.objects.create_user('cliente', password='x'))
+        self.assertEqual(self.client.get(reverse('tienda:inventario')).status_code, 403)
+
+    def test_datos_internos_solo_para_staff_en_la_ficha(self):
+        p = crear('teclado k2')
+        url = reverse('tienda:detalle', args=[p.pk])
+        self.assertNotContains(self.client.get(url), 'Valor en inventario')
+        self.client.force_login(User.objects.create_user('jefe2', password='x', is_staff=True))
+        self.assertContains(self.client.get(url), 'Valor en inventario')
+
+    def test_el_enlace_solo_se_ve_para_staff(self):
+        self.assertNotContains(self.client.get(reverse('tienda:home')), '/inventario/')
+        self.client.force_login(User.objects.create_user('jefe', password='x', is_staff=True))
+        self.assertContains(self.client.get(reverse('tienda:home')), '/inventario/')
+
+
+class ConsultaWhatsAppTests(TestCase):
+    def test_ficha_con_boton_de_consulta(self):
+        p = crear('teclado k2', precio=329.9)
+        r = self.client.get(reverse('tienda:detalle', args=[p.pk]))
+        self.assertContains(r, 'wa.me/51999999999')
+        self.assertContains(r, 'Consultar por WhatsApp')
+
+    def test_producto_agotado_ofrece_avisar(self):
+        p = crear('router ax', stock=0)
+        r = self.client.get(reverse('tienda:detalle', args=[p.pk]))
+        self.assertContains(r, 'Avisarme cuando haya stock')
 
 
 class TagsPersonalizadosTests(TestCase):
